@@ -8,6 +8,7 @@ export const useFairService = () => {
   const getAll = () => {
     return fairRepository.getAll()
   }
+
   const create = (dto: FairCreateDto) => {
     return fairRepository.create(dto)
   }

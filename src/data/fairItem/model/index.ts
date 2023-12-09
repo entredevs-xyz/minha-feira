@@ -20,7 +20,7 @@ export class FairItemModel {
   @Column({ nullable: true })
   brand?: string
 
-  @Column()
+  @Column({ type: 'float' })
   price: number
 
   @Column({ nullable: true })

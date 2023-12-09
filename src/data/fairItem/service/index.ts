@@ -10,7 +10,6 @@ export const useFairItemService = () => {
     return fairItemRepository.getAll()
   }
   const create = (dto: FairItemCreateDto, fair: FairModel) => {
-    console.log('dto', dto)
     return fairItemRepository.create(dto, fair)
   }
   const getById = (id: number) => {

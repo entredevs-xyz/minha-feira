@@ -30,7 +30,7 @@ const Dashboard = ({ navigation }: RouteProps) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" backgroundColor={colors.background} />
+      <StatusBar style="dark" backgroundColor={colors.background} />
       <ImageBackground
         source={superMarket}
         style={styles.viewUp}

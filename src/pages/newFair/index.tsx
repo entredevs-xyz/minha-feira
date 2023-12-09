@@ -2,13 +2,7 @@ import { FairModel } from '@/data/fair/model'
 import { useFairService } from '@/data/fair/service'
 import { AppThemeColors, useAppTheme } from '@/theme'
 import { useEffect, useMemo, useState } from 'react'
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native'
+import { Keyboard, ScrollView, StyleSheet, View } from 'react-native'
 import {
   TextInput,
   Button,
@@ -50,7 +44,6 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
 
     getById(id).then((res) => {
       if (!res) return
-
       setCurrentFair(res)
       setName(res?.name ?? '')
     })
@@ -58,11 +51,12 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
 
   useEffect(() => {
     if (currentFair) return
+    if (id) return
 
     create({}).then((res) => {
       setCurrentFair(res)
     })
-  }, [currentFair, create])
+  }, [currentFair, create, id])
 
   const handlerUpdateDescription = () => {
     if (!currentFair) return
@@ -119,6 +113,12 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
     Keyboard.addListener('keyboardDidHide', handlerKeyboardDidHide)
   }, [])
 
+  const fairList = useMemo(() => {
+    if (!currentFair) return []
+    if (!currentFair.fairList || !currentFair.fairList.length) return []
+    return [...currentFair.fairList].reverse()
+  }, [currentFair])
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -155,7 +155,7 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
         </Button>
       </View>
       <ScrollView style={styles.scrollViewContainer}>
-        {currentFair?.fairList?.map((item) => (
+        {fairList.map((item) => (
           <List.Item
             theme={{
               colors: {
@@ -324,12 +324,12 @@ const getStyles = (colors: AppThemeColors) =>
     },
     totalValue: {
       fontWeight: 'bold',
-      fontSize: 18,
+      fontSize: 25,
       color: colors.tertiaryColor,
     },
     totalLabel: {
       fontWeight: 'bold',
-      fontSize: 18,
+      fontSize: 25,
       color: colors.tertiaryColor,
     },
     safeAreaView: {
