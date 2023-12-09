@@ -7,7 +7,12 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "update": "eas update --auto",
+    "build:android": "eas build -p android --profile development",
+    "build:ios": "eas build -p ios --profile development",
+    "build:prod:android": "eas build -p android --profile production",
+    "build:prod:ios": "eas build -p ios --profile production"
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "0.2.9",
