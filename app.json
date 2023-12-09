@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -21,6 +21,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "owner": "margemcientifica",
+    "extra": {
+      "eas": {
+        "projectId": "31cc74d9-154b-44b0-be57-5e65205e0275"
+      }
+    },
+    "packagerOpts": {
+      "config": "metro.config.js"
     }
   }
 }
