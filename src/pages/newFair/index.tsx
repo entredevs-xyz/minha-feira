@@ -2,7 +2,7 @@ import { FairModel } from '@/data/fair/model'
 import { useFairService } from '@/data/fair/service'
 import { AppThemeColors, useAppTheme } from '@/theme'
 import { useEffect, useMemo, useState } from 'react'
-import { Keyboard, ScrollView, StyleSheet, View } from 'react-native'
+import { Keyboard, Platform, ScrollView, StyleSheet, View } from 'react-native'
 import {
   TextInput,
   Button,
@@ -19,6 +19,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { RouteProps } from '@/router/routes'
 
 const componentsMode = 'outlined'
+
+const KEYBOARD_OFFSET = Platform.OS === 'ios' ? 300 : 0
 
 const NewFair: React.FC<RouteProps> = ({ route }) => {
   const { colors } = useAppTheme()
@@ -99,7 +101,7 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
     if (!currentFair.fairList) return 0
     return currentFair.fairList?.reduce((acc, item) => {
       return acc + item.price
-    }, 0)
+    }, 0).toFixed(2)
   }, [currentFair])
 
   useEffect(() => {
@@ -211,7 +213,7 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
       <Portal>
         <Modal
           style={{
-            marginBottom: keyboardIsOpen ? 300 : 0,
+            marginBottom: keyboardIsOpen ? KEYBOARD_OFFSET : 0,
           }}
           visible={modalVisible}
           onDismiss={hideModal}

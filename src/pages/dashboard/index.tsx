@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { View, Text, StyleSheet, ImageBackground } from 'react-native'
-import { Button, Surface } from 'react-native-paper'
+import { Button, Icon, Surface } from 'react-native-paper'
 import { AppThemeColors, useAppTheme } from '@/theme'
 import superMarket from '@/assets/images/super-market2.jpg'
 import LineChartComp from '@/components/lineChart'
 import { RouteProps } from '@/router/routes'
 import { useFairService } from '@/data/fair/service'
+import { FairModel } from '@/data/fair/model'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { orderBy, takeRight, uniq } from 'lodash'
 
 const Dashboard = ({ navigation }: RouteProps) => {
   const { colors } = useAppTheme()
   const styles = getStyles(colors)
+  const [fairs, setFairs] = React.useState<FairModel[]>([])
 
   const { getAll } = useFairService()
 
@@ -22,14 +26,65 @@ const Dashboard = ({ navigation }: RouteProps) => {
     navigation.navigate('FairHistory')
   }
 
-  useEffect(() => {
-    getAll().catch((err) => {
+  const handlerRefresh = useCallback(() => {
+    getAll().then((allFairs) => {
+      setFairs(allFairs)
+    }).catch((err) => {
       console.log('fairService error: ', err)
     })
   }, [getAll])
 
+  useEffect(() => {
+    handlerRefresh()
+  }, [handlerRefresh])
+
+  const months = useMemo(() => {
+    const _months = orderBy(fairs, "createdAt").map(fair => {
+      const date = new Date(fair.createdAt);
+      const monthName = date.toLocaleString('pt-BR', { month: 'short', year: '2-digit' });
+      return monthName
+    });
+    return takeRight(uniq(_months), 12)
+  }, [fairs]);
+
+  const monthsPrice = useMemo(() => {
+    const fairsAndMonth = orderBy(fairs, "createdAt").map(fair => ({
+      month: new Date(fair.createdAt).toLocaleString('pt-BR', { month: 'short', year: '2-digit' }),
+      price: fair.fairList?.reduce((acc, item) => acc + item.price, 0) ?? 0
+    }))
+    const _months = months.map(month => {
+      const monthPrice = fairsAndMonth.filter(fair => fair.month === month).reduce((acc, item) => acc + item.price, 0)
+      return monthPrice
+    })
+    return takeRight(_months, 12)
+  }, [fairs, months])
+
+  const averagePrice = useMemo(() => {
+    let totalPrice = 0
+    fairs.forEach((fair) => {
+      let totalPriceItems = 0
+      fair.fairList?.forEach((item) => {
+        totalPriceItems += item.price
+      })
+      totalPrice += totalPriceItems
+    })
+    if (totalPrice === 0) return 0
+    if (fairs.length === 0) return 0
+    return (totalPrice / fairs.length).toFixed(2)
+  }, [fairs])
+
   return (
     <View style={styles.container}>
+      <View style={styles.refresh}>
+        <TouchableOpacity
+          onPress={handlerRefresh}>
+          <Icon
+            source="refresh"
+            color={colors.onPrimaryColor}
+            size={40}
+          />
+        </TouchableOpacity>
+      </View>
       <StatusBar style="dark" backgroundColor={colors.background} />
       <ImageBackground
         source={superMarket}
@@ -40,13 +95,13 @@ const Dashboard = ({ navigation }: RouteProps) => {
           <Text style={styles.mediaTitle}>PREÇO MEDIO:</Text>
           <View style={styles.mediaValue}>
             <Text style={styles.mediaSufix}>R$</Text>
-            <Text style={styles.mediaPrice}>500,00</Text>
+            <Text style={styles.mediaPrice}>{averagePrice}</Text>
           </View>
         </Surface>
         <Surface style={styles.LineChart}>
           <LineChartComp
-            labels={['janeiro', 'fevereiro', 'março']}
-            data={[400, 500, 300]}
+            labels={months}
+            data={monthsPrice}
           />
         </Surface>
         <View style={styles.viewButtons}>
@@ -85,8 +140,18 @@ const getStyles = (colors: AppThemeColors) =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors.primaryColor,
+      // backgroundColor: colors.primaryColor,
+      backgroundColor: 'red',
       elevation: 25,
+    },
+    refresh: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      zIndex: 1,
+      backgroundColor: colors.primaryColor,
+      borderRadius: 15,
+      elevation: 10,
     },
     buttons: {
       margin: 5,
@@ -108,9 +173,10 @@ const getStyles = (colors: AppThemeColors) =>
       marginTop: -70,
       width: '100%',
       backgroundColor: colors.primaryColor,
-      borderTopLeftRadius: 40,
-      borderTopRightRadius: 40,
-      justifyContent: 'center',
+      borderTopLeftRadius: 30,
+      borderTopRightRadius: 30,
+      paddingTop: 20,
+      justifyContent: 'flex-start',
     },
     viewButtons: {
       justifyContent: 'center',

@@ -14,6 +14,7 @@ export class FairRepository {
       order: {
         id: order,
       },
+      relations: ['fairList'],
     })
     return fairs
   }
