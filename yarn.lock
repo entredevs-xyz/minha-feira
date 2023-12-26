@@ -1971,7 +1971,7 @@
   resolved "https://registry.yarnpkg.com/@react-native/normalize-colors/-/normalize-colors-0.72.0.tgz#14294b7ed3c1d92176d2a00df48456e8d7d62212"
   integrity sha512-285lfdqSXaqKuBbbtP9qL2tDrfxdOFtIMvkKadtleRQkdOxx+uzGvFr82KHmc/sSiMtfXGp7JnFYWVh4sFl7Yw==
 
-"@react-native/virtualized-lists@^0.72.4", "@react-native/virtualized-lists@^0.72.8":
+"@react-native/virtualized-lists@^0.72.8":
   version "0.72.8"
   resolved "https://registry.yarnpkg.com/@react-native/virtualized-lists/-/virtualized-lists-0.72.8.tgz#a2c6a91ea0f1d40eb5a122fb063daedb92ed1dc3"
   integrity sha512-J3Q4Bkuo99k7mu+jPS9gSUSgq+lLRSI/+ahXNwV92XgJ/8UgOTxu2LPwhJnBk/sQKxq7E8WkZBnBiozukQMqrw==
@@ -2136,15 +2136,7 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.11.tgz#2596fb352ee96a1379c657734d4b913a613ad563"
   integrity sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==
 
-"@types/react-native@~0.72.8":
-  version "0.72.8"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.72.8.tgz#eb6238fab289f5f132f7ccf138bdfe6f21ed93e1"
-  integrity sha512-St6xA7+EoHN5mEYfdWnfYt0e8u6k2FR0P9s2arYgakQGFgU1f9FlPrIEcj0X24pLCF5c5i3WVuLCUdiCYHmOoA==
-  dependencies:
-    "@react-native/virtualized-lists" "^0.72.4"
-    "@types/react" "*"
-
-"@types/react@*", "@types/react@~18.2.42":
+"@types/react@~18.2.42":
   version "18.2.42"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.42.tgz#6f6b11a904f6d96dda3c2920328a97011a00aba7"
   integrity sha512-c1zEr96MjakLYus/wPnuWDo1/zErfdU9rNsIGmE+NV71nx88FG9Ttgo5dqorXTu/LImX2f63WBP986gJkMPNbA==
@@ -4279,10 +4271,10 @@ expo-updates-interface@~0.10.0:
   resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.10.1.tgz#cab075641cd381718ccd9264bf133dc393430a44"
   integrity sha512-I6JMR7EgjXwckrydDmrkBEX/iw750dcqpzQVsjznYWfi0HTEOxajLHB90fBFqQkUV5i5s4Fd3hYQ1Cn0oMzUbA==
 
-expo-updates@~0.18.17:
-  version "0.18.17"
-  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.18.17.tgz#11ce03ee95ee19e1a1e253b2a98dd9b3dc019c71"
-  integrity sha512-oyBDR94nYEtVw+iBod3N9LFqTfpLHofmUjh0lP12YZINUI89hvoAyqRe56eSnlpWkzziG6g1y4NGva0D0ViK6w==
+expo-updates@~0.18.18:
+  version "0.18.18"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.18.18.tgz#6650a144c48f5831b6e03f413a4599d47acca97d"
+  integrity sha512-j9I/vCepUwJ2ZfXsqy5wG+IxXAR05+uiiPABDP9fd++09zt/r2H97abyl5sWaR1h4/0Z9wxXtI0ZssVdDXPE8A==
   dependencies:
     "@expo/code-signing-certificates" "0.0.5"
     "@expo/config" "~8.1.0"
