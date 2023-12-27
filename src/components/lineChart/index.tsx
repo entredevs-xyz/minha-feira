@@ -1,22 +1,39 @@
 import { Dimensions } from 'react-native'
 import { LineChart } from 'react-native-chart-kit'
 import { useAppTheme } from '@/theme'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
+import { cloneDeep } from 'lodash'
 
 export interface LineChartProps extends PropsWithChildren {
   data: number[]
   labels: string[]
 }
 
-const LineChartComp: React.FC<LineChartProps> = ({ labels, data }) => {
+const DEFAULT_CHAR_DATA = {
+  labels: [''],
+  datasets: [{ data: [0] }],
+}
+
+const LineChartComp: React.FC<LineChartProps> = ({ labels = [], data = [] }) => {
   const { colors } = useAppTheme()
+  const [chartData, setChartData] = useState(cloneDeep(DEFAULT_CHAR_DATA))
+
+  useEffect(() => {
+    if (!labels.length || !data.length) {
+      setChartData(cloneDeep(DEFAULT_CHAR_DATA))
+      return
+    }
+
+    setChartData({
+      labels,
+      datasets: [{ data }],
+    })
+  }, [labels, data])
+
 
   return (
     <LineChart
-      data={{
-        labels,
-        datasets: [{ data }],
-      }}
+      data={chartData}
       width={Dimensions.get('window').width - 50}
       height={220}
       yAxisLabel="R$"
