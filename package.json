@@ -2,7 +2,7 @@
   "name": "minha-feira",
   "main": "node_modules/expo/AppEntry.js",
   "license": "MIT",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "scripts": {
     "start": "expo start --clear --go",
     "android": "expo start --android",
