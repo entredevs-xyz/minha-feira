@@ -98,12 +98,12 @@ const Dashboard = ({ navigation }: RouteProps) => {
             <Text style={styles.mediaPrice}>{averagePrice}</Text>
           </View>
         </Surface>
-        <Surface style={styles.LineChart}>
+        {/* <Surface style={styles.LineChart}>
           <LineChartComp
             labels={months}
             data={monthsPrice}
           />
-        </Surface>
+        </Surface> */}
         <View style={styles.viewButtons}>
           <Button
             style={styles.buttons}
