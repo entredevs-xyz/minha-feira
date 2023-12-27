@@ -4,10 +4,14 @@ import { View, Text, StyleSheet, ImageBackground } from 'react-native'
 import { Button, Icon, Surface } from 'react-native-paper'
 import { AppThemeColors, useAppTheme } from '@/theme'
 import superMarket from '@/assets/images/super-market2.jpg'
+import LineChartComp from '@/components/lineChart'
 import { RouteProps } from '@/router/routes'
 import { useFairService } from '@/data/fair/service'
 import { FairModel } from '@/data/fair/model'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { orderBy, takeRight, uniq } from 'lodash'
+import { dateToLocaleString, getFairsPriceByMoths } from '@/appUtils'
+
 
 const Dashboard = ({ navigation }: RouteProps) => {
   const { colors } = useAppTheme()
@@ -36,19 +40,39 @@ const Dashboard = ({ navigation }: RouteProps) => {
     handlerRefresh()
   }, [handlerRefresh])
 
+  const months = useMemo(() => {
+    const _months = orderBy(fairs, "createdAt").map(fair => {
+      const date = new Date(fair.createdAt);
+      const monthName = dateToLocaleString(date);
+      return monthName
+    });
+    return takeRight(uniq(_months), 12)
+  }, [fairs]);
+
+  const monthsPrice = useMemo(() => {
+
+    const fairPriceByMonth = getFairsPriceByMoths(fairs)
+    const _months = months.map(month => {
+      const monthPrice = fairPriceByMonth.filter(fair => fair.month === month).reduce((acc, item) => acc + item.price, 0)
+      return monthPrice
+    })
+    return takeRight(_months, 12)
+  }, [fairs, months])
 
   const averagePrice = useMemo(() => {
-    let totalPrice = 0
-    fairs.forEach((fair) => {
-      let totalPriceItems = 0
-      fair.fairList?.forEach((item) => {
-        totalPriceItems += item.price
-      })
-      totalPrice += totalPriceItems
-    })
-    if (totalPrice === 0) return 0
     if (fairs.length === 0) return 0
-    return (totalPrice / fairs.length).toFixed(2)
+
+    const fairPriceByMonth = getFairsPriceByMoths(fairs)
+
+    let totalPrice = 0
+    fairPriceByMonth.forEach(fair => {
+      totalPrice += fair.price
+    })
+
+    if (totalPrice === 0) return 0
+    if (fairPriceByMonth.length === 0) return 0
+
+    return (totalPrice / fairPriceByMonth.length).toFixed(2)
   }, [fairs])
 
   return (
@@ -75,6 +99,12 @@ const Dashboard = ({ navigation }: RouteProps) => {
             <Text style={styles.mediaSufix}>R$</Text>
             <Text style={styles.mediaPrice}>{averagePrice}</Text>
           </View>
+        </Surface>
+        <Surface style={styles.LineChart}>
+          <LineChartComp
+            labels={months}
+            data={monthsPrice}
+          />
         </Surface>
         <View style={styles.viewButtons}>
           <Button
