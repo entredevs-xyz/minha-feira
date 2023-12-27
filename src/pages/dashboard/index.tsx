@@ -4,12 +4,10 @@ import { View, Text, StyleSheet, ImageBackground } from 'react-native'
 import { Button, Icon, Surface } from 'react-native-paper'
 import { AppThemeColors, useAppTheme } from '@/theme'
 import superMarket from '@/assets/images/super-market2.jpg'
-import LineChartComp from '@/components/lineChart'
 import { RouteProps } from '@/router/routes'
 import { useFairService } from '@/data/fair/service'
 import { FairModel } from '@/data/fair/model'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { orderBy, takeRight, uniq } from 'lodash'
 
 const Dashboard = ({ navigation }: RouteProps) => {
   const { colors } = useAppTheme()
@@ -38,26 +36,6 @@ const Dashboard = ({ navigation }: RouteProps) => {
     handlerRefresh()
   }, [handlerRefresh])
 
-  const months = useMemo(() => {
-    const _months = orderBy(fairs, "createdAt").map(fair => {
-      const date = new Date(fair.createdAt);
-      const monthName = date.toLocaleString('pt-BR', { month: 'short', year: '2-digit' });
-      return monthName
-    });
-    return takeRight(uniq(_months), 12)
-  }, [fairs]);
-
-  const monthsPrice = useMemo(() => {
-    const fairsAndMonth = orderBy(fairs, "createdAt").map(fair => ({
-      month: new Date(fair.createdAt).toLocaleString('pt-BR', { month: 'short', year: '2-digit' }),
-      price: fair.fairList?.reduce((acc, item) => acc + item.price, 0) ?? 0
-    }))
-    const _months = months.map(month => {
-      const monthPrice = fairsAndMonth.filter(fair => fair.month === month).reduce((acc, item) => acc + item.price, 0)
-      return monthPrice
-    })
-    return takeRight(_months, 12)
-  }, [fairs, months])
 
   const averagePrice = useMemo(() => {
     let totalPrice = 0
@@ -98,12 +76,6 @@ const Dashboard = ({ navigation }: RouteProps) => {
             <Text style={styles.mediaPrice}>{averagePrice}</Text>
           </View>
         </Surface>
-        {/* <Surface style={styles.LineChart}>
-          <LineChartComp
-            labels={months}
-            data={monthsPrice}
-          />
-        </Surface> */}
         <View style={styles.viewButtons}>
           <Button
             style={styles.buttons}

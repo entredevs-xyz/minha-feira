@@ -1,4 +1,4 @@
-import { FairItemModel } from '@/data/fairItem/model'
+import type { FairItemModel } from '@/data/fairItem/model'
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -17,7 +17,7 @@ export class FairModel {
   @Column({ nullable: true })
   name?: string
 
-  @OneToMany(() => FairItemModel, (fairItem) => fairItem.fair, {
+  @OneToMany("FairItemModel", (fairItem: FairItemModel) => fairItem.fair, {
     nullable: true,
     cascade: true,
   })
