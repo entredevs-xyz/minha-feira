@@ -1,5 +1,5 @@
 import { FairModel } from "@/data/fair/model";
-import { orderBy } from "lodash";
+import { groupBy, orderBy } from "lodash";
 
 
 export const dateToLocaleString = (date: Date) => {
@@ -12,5 +12,20 @@ export const getFairsPriceByMoths = (fairs: FairModel[]) => {
         month: dateToLocaleString(new Date(fair.createdAt)),
         price: fair.fairList?.reduce((acc, item) => acc + item.price, 0) ?? 0
     }))
-    return fairsAndMonth;
+
+    const groupByMonth = groupBy(fairsAndMonth, "month");
+    const summarizedFairsAndMonth: {
+        month: string;
+        price: number;
+    }[] = [];
+
+    Object.keys(groupByMonth).forEach(month => {
+        const price = groupByMonth[month].reduce((acc, item) => acc + item.price, 0);
+        summarizedFairsAndMonth.push({
+            month,
+            price
+        })
+    })
+
+    return summarizedFairsAndMonth;
 }
