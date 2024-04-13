@@ -1,0 +1,118 @@
+import { AppThemeColors, useAppTheme } from "@/theme"
+import { StyleSheet } from "react-native"
+
+
+
+export const useStyles = () => {
+
+    const { colors } = useAppTheme()
+
+    return StyleSheet.create({
+        container: {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: colors.primaryColor,
+            elevation: 25,
+        },
+        buttons: {
+            borderRadius: 10,
+            margin: 5,
+            height: 100,
+            width: 100,
+            gap: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: colors.secondaryColor,
+            color: colors.onSecondary,
+        },
+        buttonsLabel: {
+            display: 'flex',
+            flexDirection: 'row',
+            color: colors.onSecondary,
+        },
+        welcome: {
+            fontSize: 20,
+            color: colors.onSecondary,
+            fontFamily: 'Roboto',
+            textAlign: 'center',
+            paddingLeft: 15,
+            paddingTop: 25,
+        },
+        viewUp: {
+            flex: 0,
+            height: 220,
+            width: '100%',
+            justifyContent: 'center',
+            backgroundColor: colors.secondaryColor,
+            borderBottomRightRadius: 1,
+            borderBottomLeftRadius: 1,
+            elevation: 10,
+        },
+        viewDown: {
+            flex: 1,
+            width: '100%',
+            backgroundColor: colors.primaryColor,
+            paddingBottom: 20,
+            justifyContent: 'flex-start',
+        },
+        viewButtons: {
+            justifyContent: 'center',
+            flexDirection: 'row',
+        },
+        lineChart: {
+            backgroundColor: colors.primaryColor,
+            width: '95%',
+            paddingLeft: 10,
+            paddingRight: 10,
+            borderRadius: 10,
+            elevation: 10,
+            marginBottom: 20,
+            alignSelf: 'center',
+        },
+        marca: {
+            textAlign: 'center',
+            color: colors.onPrimaryColor,
+            textShadowColor: colors.onPrimaryColor,
+        },
+        media: {
+            width: '95%',
+            height: 100,
+            alignSelf: 'center',
+            top: -25,
+            borderRadius: 10,
+            marginBottom: 15,
+            backgroundColor: colors.primaryColor,
+            padding: 10,
+            elevation: 10,
+        },
+        mediaTitle: {
+            fontSize: 10,
+            fontFamily: 'Roboto',
+            color: colors.onPrimaryColor,
+        },
+        mediaPrice: {
+            textAlign: 'center',
+            fontSize: 50,
+            fontFamily: 'Roboto',
+            color: colors.onPrimaryColor,
+        },
+        mediaValue: {
+            color: colors.onPrimaryColor,
+            flexDirection: 'row',
+            justifyContent: 'center',
+        },
+        mediaSufix: {
+            color: colors.onPrimaryColor,
+            paddingTop: 10,
+        },
+        footer: {
+            height: 20,
+            width: '100%',
+            position: 'absolute',
+            bottom: 0,
+        },
+    })
+
+
+}
