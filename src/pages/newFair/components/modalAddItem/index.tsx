@@ -1,7 +1,7 @@
 import { FairItemCreateDto } from '@/data/fairItem/dto/index.dto'
 import { AppThemeColors, useAppTheme } from '@/theme'
 import { useState } from 'react'
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Button, TextInput, Text } from 'react-native-paper'
 
 const componentsMode = 'outlined'
@@ -90,7 +90,7 @@ const ModalAddItem: React.FC<ModalAddItemProps> = ({ onSaveItem }) => {
         </Button>
         <Button
           style={styles.decrementAmountButton}
-          textColor={colors.onSecondaryColor}
+          textColor={colors.onFourthColor}
           mode={'elevated'}
           onPress={() => addAmountHandler(-1)}
         >

@@ -9,16 +9,16 @@ export const theme = {
     onPrimaryColor: '#0d5c63',
 
     secondaryColor: '#0d5c63',
-    onSecondaryColor: '#fff',
+    onSecondaryColor: '#e9fbfc',
 
     tertiaryColor: '#44a1a0',
-    onTertiaryColor: '#fff',
+    onTertiaryColor: '#e9fbfc',
 
     fourthColor: '#78cdd7',
-    onFourthColor: '#fff',
+    onFourthColor: '#e9fbfc',
 
     fifthColor: '#247b7b',
-    onFifthColor: '#fff',
+    onFifthColor: '#e9fbfc',
   },
 }
 

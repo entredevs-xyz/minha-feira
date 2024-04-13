@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Icon, Surface } from 'react-native-paper'
@@ -8,12 +8,17 @@ import { useFairService } from '@/data/fair/service'
 import { getRandomPhrase } from './util'
 import { useStyles } from './styles'
 import { useAppTheme } from '@/theme'
+import { FairModel } from '@/data/fair/model'
+import { orderBy, takeRight, uniq } from 'lodash'
+import { dateToLocaleString, getFairsPriceByMoths } from '@/appUtils'
+
 
 const Dashboard = ({ navigation }: RouteProps) => {
 
   const styles = useStyles()
   const { colors } = useAppTheme()
   const [currentPhrase] = React.useState(getRandomPhrase())
+  const [fairs, setFairs] = React.useState<FairModel[]>([])
 
   const { getAll } = useFairService()
 
@@ -25,14 +30,65 @@ const Dashboard = ({ navigation }: RouteProps) => {
     navigation.navigate('FairHistory')
   }
 
-  useEffect(() => {
-    getAll().catch((err) => {
+  const handlerRefresh = useCallback(() => {
+    getAll().then((allFairs) => {
+      setFairs(allFairs)
+    }).catch((err) => {
       console.log('fairService error: ', err)
     })
   }, [getAll])
 
+  useEffect(() => {
+    handlerRefresh()
+  }, [handlerRefresh])
+
+  const months = useMemo(() => {
+    const _months = orderBy(fairs, "createdAt").map(fair => {
+      const date = new Date(fair.createdAt);
+      const monthName = dateToLocaleString(date);
+      return monthName
+    });
+    return takeRight(uniq(_months), 12)
+  }, [fairs]);
+
+  const monthsPrice = useMemo(() => {
+
+    const fairPriceByMonth = getFairsPriceByMoths(fairs)
+    const _months = months.map(month => {
+      const monthPrice = fairPriceByMonth.filter(fair => fair.month === month).reduce((acc, item) => acc + item.price, 0)
+      return monthPrice
+    })
+    return takeRight(_months, 12)
+  }, [fairs, months])
+
+  const averagePrice = useMemo(() => {
+    if (fairs.length === 0) return 0
+
+    const fairPriceByMonth = getFairsPriceByMoths(fairs)
+
+    let totalPrice = 0
+    fairPriceByMonth.forEach(fair => {
+      totalPrice += fair.price
+    })
+
+    if (totalPrice === 0) return 0
+    if (fairPriceByMonth.length === 0) return 0
+
+    return (totalPrice / fairPriceByMonth.length).toFixed(2)
+  }, [fairs])
+
   return (
     <View style={styles.container}>
+      <View style={styles.refresh}>
+        <TouchableOpacity
+          onPress={handlerRefresh}>
+          <Icon
+            source="refresh"
+            color={colors.onPrimaryColor}
+            size={40}
+          />
+        </TouchableOpacity>
+      </View>
       <StatusBar style="dark" backgroundColor={colors.background} />
 
       <View style={styles.viewUp}>
@@ -43,13 +99,13 @@ const Dashboard = ({ navigation }: RouteProps) => {
           <Text style={styles.mediaTitle}>PREÇO MEDIO:</Text>
           <View style={styles.mediaValue}>
             <Text style={styles.mediaSufix}>R$</Text>
-            <Text style={styles.mediaPrice}>500,00</Text>
+            <Text style={styles.mediaPrice}>{averagePrice}</Text>
           </View>
         </Surface>
         <Surface style={styles.lineChart}>
           <LineChartComp
-            labels={['janeiro', 'fevereiro', 'março']}
-            data={[400, 500, 300]}
+            labels={months}
+            data={monthsPrice}
           />
         </Surface>
         <View style={styles.viewButtons}>

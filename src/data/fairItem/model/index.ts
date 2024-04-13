@@ -1,4 +1,4 @@
-import { FairModel } from '@/data/fair/model'
+import type { FairModel } from '@/data/fair/model'
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -26,7 +26,7 @@ export class FairItemModel {
   @Column({ nullable: true })
   code?: string
 
-  @ManyToOne(() => FairModel, (fair) => fair.fairList, {
+  @ManyToOne("FairModel", (fair: FairModel) => fair.fairList, {
     onDelete: 'CASCADE',
   })
   fair: FairModel
