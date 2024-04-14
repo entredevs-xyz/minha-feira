@@ -1,12 +1,13 @@
 import { FairModel } from '@/data/fair/model'
 import { useFairService } from '@/data/fair/service'
 import { useAppTheme } from '@/theme'
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Button, ScrollView, View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { RouteProps } from '@/router/routes'
 import { useStyles } from './styles'
+import { useFocusEffect } from '@react-navigation/native'
 
 const FairHistory: React.FC<RouteProps> = ({ navigation }: RouteProps) => {
   const { colors } = useAppTheme()
@@ -14,11 +15,16 @@ const FairHistory: React.FC<RouteProps> = ({ navigation }: RouteProps) => {
   const [currentFairs, setCurrentFairs] = useState<FairModel[]>()
   const { getAll, remove } = useFairService()
 
-  useEffect(() => {
+  console.log("loop detector", "FairHistory")
+
+
+  const handlerRefresh = useCallback(() => {
     getAll().then((res) => {
       setCurrentFairs(res)
     })
   }, [getAll])
+
+  useFocusEffect(handlerRefresh)
 
   const handlerRemoveItem = async (id: number) => {
     await remove(id)
@@ -73,7 +79,7 @@ const FairHistory: React.FC<RouteProps> = ({ navigation }: RouteProps) => {
                 <Text
                   {...props}
                   style={styles.itemValue}
-                >{`${item.createdAt.toLocaleDateString('pt-br')}`}</Text>
+                >{`${item.date?.toLocaleDateString('pt-br')}`}</Text>
               )}
               left={(props) => (
                 <List.Icon

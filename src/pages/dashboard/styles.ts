@@ -44,6 +44,7 @@ export const useStyles = () => {
             position: 'absolute',
             top: 10,
             right: 10,
+            zIndex: 10,
         },
         viewUp: {
             position: 'relative',

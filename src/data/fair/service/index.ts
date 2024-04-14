@@ -1,5 +1,5 @@
 import { useDatabaseConnection } from '@/data/connection'
-import { FairCreateDto } from '../dto/index.dto'
+import { FairCreateDto, FairUpdateDto } from '../dto/index.dto'
 import { useRef } from 'react'
 
 export const useFairService = () => {
@@ -16,8 +16,8 @@ export const useFairService = () => {
     return fairRepository.getById(id)
   }
 
-  const update = (id: number, description: string) => {
-    return fairRepository.update(id, description)
+  const update = (id: number, dto: FairUpdateDto) => {
+    return fairRepository.update(id, dto)
   }
 
   const remove = (id: number) => {

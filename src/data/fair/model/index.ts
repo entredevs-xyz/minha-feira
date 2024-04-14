@@ -26,6 +26,9 @@ export class FairModel {
   @Column({ default: true })
   isActive: boolean
 
+  @Column({ nullable: true })
+  date: Date
+
   @CreateDateColumn()
   createdAt: Date
 

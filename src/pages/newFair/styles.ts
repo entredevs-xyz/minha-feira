@@ -1,5 +1,5 @@
 import { useAppTheme } from "@/theme"
-import { StyleSheet } from "react-native"
+import { Platform, StyleSheet } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 
@@ -7,6 +7,7 @@ export const useStyles = () => {
 
     const { colors } = useAppTheme()
     const insets = useSafeAreaInsets()
+    const isAndroid = Platform.OS === 'android'
 
     return StyleSheet.create({
       container: {
@@ -20,7 +21,7 @@ export const useStyles = () => {
       },
       header: {
         flexDirection: 'row',
-        gap: 10,
+        gap: 5,
         alignItems: 'center',
         justifyContent: 'center',
         alignContent: 'center',
@@ -44,11 +45,22 @@ export const useStyles = () => {
         backgroundColor: colors.primaryColor,
       },
       button: {
+        marginTop: 5,
+        borderRadius: 5,
         borderColor: colors.secondaryColor,
         backgroundColor: colors.secondaryColor,
       },
       modalStyle: {
         backgroundColor: 'white',
+        padding: 5,
+        borderRadius: 5,
+        height: 420,
+        width: '95%',
+        alignSelf: 'center',
+      },
+      dateModalStyle: {
+        backgroundColor: isAndroid ? 'transparent' : colors.secondaryColor,
+        elevation: isAndroid ? 0 : 25,
         padding: 5,
         borderRadius: 5,
         height: 420,

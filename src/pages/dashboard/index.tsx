@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Icon, Surface } from 'react-native-paper'
@@ -11,9 +11,10 @@ import { useAppTheme } from '@/theme'
 import { FairModel } from '@/data/fair/model'
 import { orderBy, takeRight, uniq } from 'lodash'
 import { dateToLocaleString, getFairsPriceByMoths } from '@/appUtils'
+import { useFocusEffect } from '@react-navigation/native'
 
 
-const Dashboard:React.FC<RouteProps> = ({ navigation }) => {
+const Dashboard: React.FC<RouteProps> = ({ navigation }) => {
 
   const styles = useStyles()
   const { colors } = useAppTheme()
@@ -21,6 +22,8 @@ const Dashboard:React.FC<RouteProps> = ({ navigation }) => {
   const [fairs, setFairs] = React.useState<FairModel[]>([])
 
   const { getAll } = useFairService()
+
+  console.log("loop detector", "Dashboard")
 
   const handlerNewFair = () => {
     navigation.navigate('NewFair')
@@ -30,6 +33,8 @@ const Dashboard:React.FC<RouteProps> = ({ navigation }) => {
     navigation.navigate('FairHistory')
   }
 
+
+
   const handlerRefresh = useCallback(() => {
     getAll().then((allFairs) => {
       setFairs(allFairs)
@@ -38,13 +43,11 @@ const Dashboard:React.FC<RouteProps> = ({ navigation }) => {
     })
   }, [getAll])
 
-  useEffect(() => {
-    handlerRefresh()
-  }, [handlerRefresh])
+  useFocusEffect(handlerRefresh)
 
   const months = useMemo(() => {
     const _months = orderBy(fairs, "createdAt").map(fair => {
-      const date = new Date(fair.createdAt);
+      const date = new Date(fair.date);
       const monthName = dateToLocaleString(date);
       return monthName
     });
@@ -85,15 +88,15 @@ const Dashboard:React.FC<RouteProps> = ({ navigation }) => {
       </View>
       <View style={styles.viewDown}>
         <Surface style={styles.media}>
-        <TouchableOpacity
-          style={styles.refresh}
-          onPress={handlerRefresh}>
-          <Icon
-            source="refresh"
-            color={colors.onPrimaryColor}
-            size={30}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.refresh}
+            onPress={handlerRefresh}>
+            <Icon
+              source="refresh"
+              color={colors.onPrimaryColor}
+              size={30}
+            />
+          </TouchableOpacity>
           <Text style={styles.mediaTitle}>PREÇO MEDIO:</Text>
           <View style={styles.mediaValue}>
             <Text style={styles.mediaSufix}>R$</Text>

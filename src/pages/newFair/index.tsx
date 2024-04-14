@@ -18,6 +18,8 @@ import { useFairItemService } from '@/data/fairItem/service'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { RouteProps } from '@/router/routes'
 import { useStyles } from './styles'
+import DatePicker from '@/components/datePicker'
+import { FairUpdateDto } from '@/data/fair/dto/index.dto'
 
 const componentsMode = 'outlined'
 
@@ -26,13 +28,17 @@ const KEYBOARD_OFFSET = Platform.OS === 'ios' ? 300 : 0
 const NewFair: React.FC<RouteProps> = ({ route }) => {
   const { colors } = useAppTheme()
   const styles = useStyles()
-  const [name, setName] = useState('')
+
   const [snackVisible, setSnackVisible] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const [currentFair, setCurrentFair] = useState<FairModel>()
   const { create, update, getById } = useFairService()
   const { create: createItem, remove: removeItem } = useFairItemService()
+
   const [keyboardIsOpen, setKeyboardIsOpen] = useState(false)
+  const [name, setName] = useState('')
+  const [date, setDate] = useState<Date>(new Date());
+  const [showDate, setShowDate] = useState(false);
 
   const onToggleSnackBar = () => setSnackVisible(!snackVisible)
   const onDismissSnackBar = () => setSnackVisible(false)
@@ -42,6 +48,8 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
 
   const id = route?.params?.id
 
+  console.log("loop detector", "NewFair")
+
   useEffect(() => {
     if (!id) return
 
@@ -49,27 +57,34 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
       if (!res) return
       setCurrentFair(res)
       setName(res?.name ?? '')
+      setDate(new Date(res?.date ?? new Date()));
     })
   }, [id, getById])
 
   useEffect(() => {
-    if (currentFair) return
     if (id) return
+    if (currentFair) return
+    if (name) return
 
-    create({}).then((res) => {
-      setCurrentFair(res)
-    })
-  }, [currentFair, create, id])
+    const newFairDate = new Date(date ?? new Date())
+    setName(`Feira ${newFairDate.toLocaleDateString("pt-BR", { month: 'long', day: 'numeric' })}`)
 
-  const handlerUpdateDescription = () => {
-    if (!currentFair) return
-    if (!name) return
+  }, [currentFair, date, id, name])
 
-    const newName = name.trim()
-    update(currentFair.id, newName).then((res) => {
+
+  const handlerUpdateFair = async () => {
+
+    const _currentFair = await getCurrentFair()
+    if (!_currentFair) return
+
+    const updateDto: FairUpdateDto = {
+      name: (name ?? "").trim(),
+      date: new Date(date ?? new Date()),
+    }
+
+    update(_currentFair.id, updateDto).then((res) => {
       if (res) {
         onToggleSnackBar()
-        setCurrentFair(res)
       }
     })
   }
@@ -78,16 +93,34 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
     showModal()
   }
 
+  const getCurrentFair = async () => {
+
+    if (currentFair) return currentFair
+
+    const newFairDate = new Date(date ?? new Date())
+    const newFair = await create({
+      name: (name ?? "").trim(),
+      date: newFairDate,
+    })
+    setCurrentFair(newFair)
+    return newFair
+
+  }
+
   const handlerSaveItem = async (items: FairItemCreateDto[]) => {
     setModalVisible(false)
-    if (!currentFair) return
-    for (let index = 0; index < items.length; index++) {
-      const item = items[index]
-      await createItem(item, currentFair)
-    }
 
-    const fair = await getById(currentFair.id)
-    if (fair) setCurrentFair(fair)
+    const _currentFair = await getCurrentFair()
+    if (_currentFair) {
+
+      for (let index = 0; index < items.length; index++) {
+        const item = items[index]
+        await createItem(item, _currentFair)
+      }
+
+      const fair = await getById(_currentFair.id)
+      if (fair) setCurrentFair(fair)
+    }
   }
 
   const handlerRemoveItem = async (id: number) => {
@@ -122,6 +155,13 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
     return [...currentFair.fairList].reverse()
   }, [currentFair])
 
+  const onChange = (selectedDate: Date | undefined) => {
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
+    setShowDate(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -139,9 +179,16 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
         <Button
           style={styles.button}
           textColor={colors.onSecondaryColor}
-          icon="content-save"
+          icon="calendar"
           mode={'elevated'}
-          onPress={handlerUpdateDescription}
+          onPress={() => setShowDate(true)}>
+          {date.toLocaleDateString("pt-BR", { month: 'numeric', day: 'numeric' })}
+        </Button>
+        <Button
+          style={styles.button}
+          textColor={colors.onSecondaryColor}
+          mode={'elevated'}
+          onPress={handlerUpdateFair}
         >
           Salvar
         </Button>
@@ -235,6 +282,10 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
       >
         Feira Atualizada
       </Snackbar>
+      <DatePicker
+        date={date}
+        onChange={onChange}
+        showDate={showDate} />
     </View>
   )
 }

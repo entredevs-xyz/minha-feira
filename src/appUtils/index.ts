@@ -7,9 +7,9 @@ export const dateToLocaleString = (date: Date) => {
 }
 
 export const getFairsPriceByMoths = (fairs: FairModel[]) => {
-
+    
     const fairsAndMonth = orderBy(fairs, "createdAt").map(fair => ({
-        month: dateToLocaleString(new Date(fair.createdAt)),
+        month: dateToLocaleString(new Date(fair.date)),
         price: fair.fairList?.reduce((acc, item) => acc + item.price, 0) ?? 0
     }))
 

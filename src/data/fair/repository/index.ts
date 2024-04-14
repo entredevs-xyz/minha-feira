@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm'
 import { FairModel } from '@/data/fair/model'
-import { FairCreateDto } from '../dto/index.dto'
+import { FairCreateDto, FairUpdateDto } from '../dto/index.dto'
 
 export class FairRepository {
   private ormRepository: Repository<FairModel>
@@ -19,22 +19,24 @@ export class FairRepository {
     return fairs
   }
 
-  public async create({ name }: FairCreateDto): Promise<FairModel> {
+  public async create({ name, date }: FairCreateDto): Promise<FairModel> {
     const fair = this.ormRepository.create({
       name,
+      date: new Date(date ?? new Date()),
     })
     await this.ormRepository.save(fair)
     return fair
   }
 
-  public async update(id: number, name: string): Promise<FairModel | null> {
+  public async update(id: number, dto: FairUpdateDto): Promise<FairModel | null> {
     const fair = await this.ormRepository.findOne({
       where: { id },
     })
     if (!fair) {
       return null
     }
-    fair.name = name
+    fair.name = dto.name
+    fair.date = dto.date ?? new Date()
     await this.ormRepository.save(fair)
     return fair
   }
