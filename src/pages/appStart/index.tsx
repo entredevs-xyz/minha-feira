@@ -6,7 +6,7 @@ import { RouteProps } from '@/router/routes'
 
 preventAutoHideAsync()
 
-const AppStart = ({ navigation }: RouteProps) => {
+const AppStart:React.FC<RouteProps> = ({ navigation }) => {
   const [appIsReady, setAppIsReady] = useState(false)
 
   useEffect(() => {

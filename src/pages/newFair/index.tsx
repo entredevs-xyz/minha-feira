@@ -1,8 +1,8 @@
 import { FairModel } from '@/data/fair/model'
 import { useFairService } from '@/data/fair/service'
-import { AppThemeColors, useAppTheme } from '@/theme'
+import { useAppTheme } from '@/theme'
 import { useEffect, useMemo, useState } from 'react'
-import { Keyboard, Platform, ScrollView, StyleSheet, View } from 'react-native'
+import { Keyboard, Platform, ScrollView, View } from 'react-native'
 import {
   TextInput,
   Button,
@@ -17,6 +17,7 @@ import { FairItemCreateDto } from '@/data/fairItem/dto/index.dto'
 import { useFairItemService } from '@/data/fairItem/service'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { RouteProps } from '@/router/routes'
+import { useStyles } from './styles'
 
 const componentsMode = 'outlined'
 
@@ -24,7 +25,7 @@ const KEYBOARD_OFFSET = Platform.OS === 'ios' ? 300 : 0
 
 const NewFair: React.FC<RouteProps> = ({ route }) => {
   const { colors } = useAppTheme()
-  const styles = getStyles(colors)
+  const styles = useStyles()
   const [name, setName] = useState('')
   const [snackVisible, setSnackVisible] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
@@ -238,105 +239,6 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
   )
 }
 
-const getStyles = (colors: AppThemeColors) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      backgroundColor: colors.primaryColor,
-      elevation: 25,
-    },
-    header: {
-      flexDirection: 'row',
-      gap: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignContent: 'center',
-      padding: 10,
-      width: '100%',
-      borderBottomColor: colors.secondaryColor + '20',
-      borderBottomWidth: 1,
-    },
-    addItemContainer: {
-      flexDirection: 'row',
-      gap: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignContent: 'center',
-      padding: 10,
-      width: '100%',
-    },
-    description: {
-      flex: 1,
-      fontWeight: 'bold',
-      backgroundColor: colors.primaryColor,
-    },
-    button: {
-      borderColor: colors.secondaryColor,
-      backgroundColor: colors.secondaryColor,
-    },
-    modalStyle: {
-      backgroundColor: 'white',
-      padding: 5,
-      borderRadius: 5,
-      height: 420,
-      width: '95%',
-      alignSelf: 'center',
-    },
-    listItem: {
-      backgroundColor: colors.secondaryColor,
-      borderRadius: 5,
-      margin: 5,
-      padding: 5,
-      width: '95%',
-    },
-    itemLabel: {
-      color: colors.onSecondaryColor,
-      fontSize: 16,
-    },
-    itemValue: {
-      color: colors.tertiaryColor,
-      fontSize: 16,
-    },
-    itemIcon: {
-      color: colors.tertiaryColor,
-    },
-    removeButton: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      alignContent: 'center',
-    },
-    scrollViewContainer: {
-      width: '100%',
-    },
-    summaryContainer: {
-      flexDirection: 'row',
-      gap: 10,
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      alignContent: 'center',
-      padding: 10,
-      paddingLeft: 20,
-      paddingRight: 20,
-      width: '100%',
-      borderTopColor: colors.secondaryColor + '20',
-      borderTopWidth: 1,
-    },
-    totalValue: {
-      fontWeight: 'bold',
-      fontSize: 25,
-      color: colors.tertiaryColor,
-    },
-    totalLabel: {
-      fontWeight: 'bold',
-      fontSize: 25,
-      color: colors.tertiaryColor,
-    },
-    safeAreaView: {
-      flex: 1,
-    },
-  })
+
 
 export default NewFair

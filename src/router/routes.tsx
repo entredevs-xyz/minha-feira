@@ -3,7 +3,7 @@ import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import AppStart from '@/pages/appStart'
 import Dashboard from '@/pages/dashboard'
-import NewFair from '../pages/newFair'
+import NewFair from '@/pages/newFair'
 import FairHistory from '@/pages/history'
 
 export type RootStackParamList = {

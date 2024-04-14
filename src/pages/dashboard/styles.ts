@@ -1,11 +1,13 @@
-import { AppThemeColors, useAppTheme } from "@/theme"
+import { useAppTheme } from "@/theme"
 import { StyleSheet } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 
 
 export const useStyles = () => {
 
     const { colors } = useAppTheme()
+    const insets = useSafeAreaInsets()
 
     return StyleSheet.create({
         container: {
@@ -14,6 +16,7 @@ export const useStyles = () => {
             justifyContent: 'center',
             backgroundColor: colors.primaryColor,
             elevation: 25,
+            paddingBottom: insets.bottom,
         },
         buttons: {
             borderRadius: 10,
@@ -36,12 +39,20 @@ export const useStyles = () => {
             color: colors.onSecondary,
             fontFamily: 'Roboto',
             textAlign: 'center',
-            paddingLeft: 15,
-            paddingTop: 25,
+        },
+        refresh:{
+            position: 'absolute',
+            top: 10,
+            right: 10,
         },
         viewUp: {
+            position: 'relative',
             flex: 0,
-            height: 220,
+            height: 180,
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingTop: insets.top,
+            paddingBottom: 20,
             width: '100%',
             justifyContent: 'center',
             backgroundColor: colors.secondaryColor,

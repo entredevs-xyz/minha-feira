@@ -1,15 +1,16 @@
 import { FairModel } from '@/data/fair/model'
 import { useFairService } from '@/data/fair/service'
-import { AppThemeColors, useAppTheme } from '@/theme'
+import { useAppTheme } from '@/theme'
 import { useEffect, useState } from 'react'
-import { Button, ScrollView, StyleSheet, View } from 'react-native'
+import { Button, ScrollView, View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { RouteProps } from '@/router/routes'
+import { useStyles } from './styles'
 
 const FairHistory: React.FC<RouteProps> = ({ navigation }: RouteProps) => {
   const { colors } = useAppTheme()
-  const styles = getStyles(colors)
+  const styles = useStyles()
   const [currentFairs, setCurrentFairs] = useState<FairModel[]>()
   const { getAll, remove } = useFairService()
 
@@ -121,69 +122,5 @@ const FairHistory: React.FC<RouteProps> = ({ navigation }: RouteProps) => {
     </View>
   )
 }
-
-const getStyles = (colors: AppThemeColors) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      backgroundColor: colors.primaryColor,
-      elevation: 25,
-    },
-    listItem: {
-      backgroundColor: colors.secondaryColor,
-      borderRadius: 5,
-      margin: 5,
-      padding: 5,
-      width: '95%',
-    },
-    description: {
-      flex: 1,
-      fontWeight: 'bold',
-    },
-    button: {
-      borderColor: colors.secondaryColor,
-      backgroundColor: colors.secondaryColor,
-    },
-    itemLabel: {
-      color: colors.onSecondaryColor,
-      fontSize: 16,
-    },
-    itemValue: {
-      color: colors.tertiaryColor,
-      fontSize: 16,
-    },
-    itemIcon: {
-      color: colors.tertiaryColor,
-    },
-    removeButton: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      alignContent: 'center',
-    },
-    scrollViewContainer: {
-      width: '100%',
-    },
-    emptyContainer: {
-      flex: 1,
-      width: '100%',
-      height: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      alignContent: 'center',
-      gap: 10,
-    },
-    emptyText: {
-      flex: 0,
-      fontSize: 20,
-      fontFamily: 'Roboto',
-    },
-    actionsContainer: {
-      flexDirection: 'row',
-      gap: 10,
-    },
-  })
 
 export default FairHistory

@@ -13,7 +13,7 @@ import { orderBy, takeRight, uniq } from 'lodash'
 import { dateToLocaleString, getFairsPriceByMoths } from '@/appUtils'
 
 
-const Dashboard = ({ navigation }: RouteProps) => {
+const Dashboard:React.FC<RouteProps> = ({ navigation }) => {
 
   const styles = useStyles()
   const { colors } = useAppTheme()
@@ -79,23 +79,21 @@ const Dashboard = ({ navigation }: RouteProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.refresh}>
+      <StatusBar style="dark" backgroundColor={colors.background} />
+      <View style={styles.viewUp}>
+        <Text style={styles.welcome}>&apos;{currentPhrase}&apos;</Text>
+      </View>
+      <View style={styles.viewDown}>
+        <Surface style={styles.media}>
         <TouchableOpacity
+          style={styles.refresh}
           onPress={handlerRefresh}>
           <Icon
             source="refresh"
             color={colors.onPrimaryColor}
-            size={40}
+            size={30}
           />
         </TouchableOpacity>
-      </View>
-      <StatusBar style="dark" backgroundColor={colors.background} />
-
-      <View style={styles.viewUp}>
-        <Text style={styles.welcome}>''{currentPhrase}''</Text>
-      </View>
-      <View style={styles.viewDown}>
-        <Surface style={styles.media}>
           <Text style={styles.mediaTitle}>PREÇO MEDIO:</Text>
           <View style={styles.mediaValue}>
             <Text style={styles.mediaSufix}>R$</Text>

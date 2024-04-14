@@ -32,17 +32,11 @@
         "projectId": "31cc74d9-154b-44b0-be57-5e65205e0275"
       }
     },
-    "packagerOpts": {
-      "config": "metro.config.js"
-    },
     "android": {
       "package": "com.margemcientifica.minhafeira"
     },
     "runtimeVersion": {
       "policy": "appVersion"
-    },
-    "plugins": [
-      "expo-font"
-    ]
+    }
   }
 }
