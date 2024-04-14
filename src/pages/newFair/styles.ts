@@ -54,10 +54,9 @@ export const useStyles = () => {
         backgroundColor: colors.secondaryColor,
       },
       modalStyle: {
-        backgroundColor: 'white',
+        backgroundColor: colors.secondaryColor,
         padding: 5,
         borderRadius: 5,
-        height: 420,
         width: '95%',
         alignSelf: 'center',
       },

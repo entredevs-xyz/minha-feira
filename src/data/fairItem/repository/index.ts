@@ -28,11 +28,14 @@ export class FairItemRepository {
     item: FairItemCreateDto,
     fair: FairModel,
   ): Promise<FairItemModel> {
-    const { name, price } = item
+    const { name, price, brand, weight, unit } = item
     const fairItem = this.ormRepository.create({
       name,
       price,
       fair,
+      brand,
+      weight,
+      unit,
     })
     await this.ormRepository.save(fairItem)
     return fairItem

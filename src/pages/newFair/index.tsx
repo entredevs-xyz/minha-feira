@@ -1,7 +1,7 @@
 import { FairModel } from '@/data/fair/model'
 import { useFairService } from '@/data/fair/service'
 import { useAppTheme } from '@/theme'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Keyboard, Platform, ScrollView, View } from 'react-native'
 import {
   TextInput,
@@ -20,6 +20,7 @@ import { RouteProps } from '@/router/routes'
 import { useStyles } from './styles'
 import DatePicker from '@/components/datePicker'
 import { FairUpdateDto } from '@/data/fair/dto/index.dto'
+import { FairItemModel } from '@/data/fairItem/model'
 
 const componentsMode = 'outlined'
 
@@ -40,6 +41,7 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
   const [date, setDate] = useState<Date>(new Date());
   const [showDate, setShowDate] = useState(false);
   const [search, setSearch] = useState('')
+  const nameLoaded = useRef(false)
 
   const onToggleSnackBar = () => setSnackVisible(!snackVisible)
   const onDismissSnackBar = () => setSnackVisible(false)
@@ -66,9 +68,11 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
     if (id) return
     if (currentFair) return
     if (name) return
+    if (nameLoaded.current) return
 
     const newFairDate = new Date(date ?? new Date())
     setName(`Feira ${newFairDate.toLocaleDateString("pt-BR", { month: 'long', day: 'numeric' })}`)
+    nameLoaded.current = true
 
   }, [currentFair, date, id, name])
 
@@ -135,7 +139,7 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
     if (!currentFair) return 0
     if (!currentFair.fairList) return 0
     return currentFair.fairList?.reduce((acc, item) => {
-      return acc + item.price
+      return acc + (item.price ?? 0)
     }, 0).toFixed(2)
   }, [currentFair])
 
@@ -167,6 +171,15 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
     setShowDate(false);
   };
 
+  const getItemName = (item: FairItemModel) => {
+
+    const { name, brand, weight, unit } = item
+
+    if (!brand && !weight && !unit) return name
+
+    return `${name} - ${brand ?? ''} ${weight ?? ''} ${unit ?? ''}`
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -186,7 +199,10 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
           textColor={colors.onSecondaryColor}
           icon="calendar"
           mode={'elevated'}
-          onPress={() => setShowDate(true)}>
+          onPress={() => {
+            Keyboard.dismiss()
+            setShowDate(true)
+          }}>
           {date.toLocaleDateString("pt-BR", { month: 'numeric', day: 'numeric' })}
         </Button>
         <Button
@@ -233,7 +249,7 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
             key={item.id}
             title={(props) => (
               <Text {...props} style={styles.itemLabel}>
-                {item.name}
+                {getItemName(item)}
               </Text>
             )}
             description={(props) => (
@@ -283,7 +299,9 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
           onDismiss={hideModal}
           contentContainerStyle={styles.modalStyle}
         >
-          <ModalAddItem onSaveItem={handlerSaveItem} />
+          <ScrollView style={styles.scrollViewContainer} keyboardShouldPersistTaps={"always"}>
+            <ModalAddItem onSaveItem={handlerSaveItem} />
+          </ScrollView>
         </Modal>
       </Portal>
       <Snackbar

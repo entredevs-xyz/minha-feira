@@ -24,6 +24,12 @@ export class FairItemModel {
   price: number
 
   @Column({ nullable: true })
+  weight?: string
+
+  @Column({ nullable: true })
+  unit?: string
+
+  @Column({ nullable: true })
   code?: string
 
   @ManyToOne("FairModel", (fair: FairModel) => fair.fairList, {

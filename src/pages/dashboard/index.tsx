@@ -46,7 +46,7 @@ const Dashboard: React.FC<RouteProps> = ({ navigation }) => {
   useFocusEffect(handlerRefresh)
 
   const months = useMemo(() => {
-    const _months = orderBy(fairs, "createdAt").map(fair => {
+    const _months = orderBy(fairs, "date").map(fair => {
       const date = new Date(fair.date);
       const monthName = dateToLocaleString(date);
       return monthName

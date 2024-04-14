@@ -1,8 +1,10 @@
 import { FairItemCreateDto } from '@/data/fairItem/dto/index.dto'
-import { AppThemeColors, useAppTheme } from '@/theme'
+import { useAppTheme } from '@/theme'
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { Button, TextInput, Text } from 'react-native-paper'
+import { useStyles } from './styles'
+import { isEmpty } from 'lodash'
 
 const componentsMode = 'outlined'
 
@@ -11,10 +13,14 @@ interface ModalAddItemProps {
 }
 const ModalAddItem: React.FC<ModalAddItemProps> = ({ onSaveItem }) => {
   const { colors } = useAppTheme()
-  const styles = getStyles(colors)
+  const styles = useStyles()
   const [name, setName] = useState('')
   const [amount, setAmount] = useState(1)
   const [price, setPrice] = useState('')
+  const [brand, setBrand] = useState('')
+  const [weight, setWeight] = useState('')
+  const [unit, setUnit] = useState('')
+
 
   console.log("loop detector", "ModalAddItem")
 
@@ -28,8 +34,18 @@ const ModalAddItem: React.FC<ModalAddItemProps> = ({ onSaveItem }) => {
 
   const handlerSave = () => {
     const nameTrim = name.trim()
+    const brandTrim = brand.trim()
+    const weightTrim = weight.trim()
+    const unitTrim = unit.trim()
+    const priceString = isEmpty(price) ? '0' : price
     const itemArray = new Array(amount)
-    const itemArrayFilled = itemArray.fill({ name: nameTrim, price })
+    const itemArrayFilled = itemArray.fill({
+      name: nameTrim,
+      price: priceString,
+      brand: brandTrim,
+      weight: weightTrim,
+      unit: unitTrim,
+    })
     if (onSaveItem) onSaveItem(itemArrayFilled)
   }
 
@@ -40,7 +56,7 @@ const ModalAddItem: React.FC<ModalAddItemProps> = ({ onSaveItem }) => {
       </Text>
       <TextInput
         outlineColor={colors.onPrimaryColor}
-        selectionColor={colors.primaryColor}
+        selectionColor={colors.secondaryColor}
         textColor={colors.secondaryColor}
         activeOutlineColor={colors.secondaryColor}
         style={styles.description}
@@ -54,7 +70,7 @@ const ModalAddItem: React.FC<ModalAddItemProps> = ({ onSaveItem }) => {
       </Text>
       <TextInput
         outlineColor={colors.onPrimaryColor}
-        selectionColor={colors.primaryColor}
+        selectionColor={colors.secondaryColor}
         textColor={colors.secondaryColor}
         activeOutlineColor={colors.secondaryColor}
         style={styles.description}
@@ -67,12 +83,55 @@ const ModalAddItem: React.FC<ModalAddItemProps> = ({ onSaveItem }) => {
         }}
       />
       <Text variant="titleSmall" style={styles.label}>
-        Quantidade:
+        Detalhes:
       </Text>
-      <View style={styles.amountContainer}>
+      <View style={styles.groupContainer}>
         <TextInput
           outlineColor={colors.onPrimaryColor}
-          selectionColor={colors.primaryColor}
+          selectionColor={colors.secondaryColor}
+          textColor={colors.secondaryColor}
+          activeOutlineColor={colors.secondaryColor}
+          placeholderTextColor={colors.onPrimaryColor + '90'}
+          style={styles.amountTextInput}
+          mode={componentsMode}
+          placeholder="Marca"
+          value={`${brand}`}
+          onChangeText={(brand) => setBrand(brand)}
+        />
+        <TextInput
+          outlineColor={colors.onPrimaryColor}
+          selectionColor={colors.secondaryColor}
+          textColor={colors.secondaryColor}
+          activeOutlineColor={colors.secondaryColor}
+          cursorColor={colors.secondaryColor}
+          placeholderTextColor={colors.onPrimaryColor + '90'}
+          style={styles.amountTextInput}
+          mode={componentsMode}
+          placeholder='Peso'
+          keyboardType="numeric"
+          value={`${weight}`}
+          onChangeText={(weight) => setWeight(weight)}
+        />
+        <TextInput
+          outlineColor={colors.onPrimaryColor}
+          selectionColor={colors.secondaryColor}
+          textColor={colors.secondaryColor}
+          activeOutlineColor={colors.secondaryColor}
+          placeholderTextColor={colors.onPrimaryColor + '90'}
+          style={styles.amountTextInput}
+          mode={componentsMode}
+          placeholder='Unidade'
+          value={`${unit}`}
+          onChangeText={(unit) => setUnit(unit)}
+        />
+      </View>
+      <Text variant="titleSmall" style={styles.label}>
+        Quantidade:
+      </Text>
+      <View style={styles.groupContainer}>
+        <TextInput
+          outlineColor={colors.onPrimaryColor}
+          selectionColor={colors.secondaryColor}
           textColor={colors.secondaryColor}
           activeOutlineColor={colors.secondaryColor}
           style={styles.amountTextInput}
@@ -112,68 +171,5 @@ const ModalAddItem: React.FC<ModalAddItemProps> = ({ onSaveItem }) => {
   )
 }
 
-const getStyles = (colors: AppThemeColors) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'column',
-      gap: 10,
-      flexWrap: 'wrap',
-      alignItems: 'center',
-      alignContent: 'center',
-      justifyContent: 'flex-start',
-      backgroundColor: colors.secondaryColor,
-      elevation: 25,
-      padding: 10,
-    },
-    description: {
-      flex: 0,
-      width: '100%',
-      fontWeight: 'bold',
-      backgroundColor: colors.primaryColor,
-    },
-    amountContainer: {
-      flex: 0,
-      flexDirection: 'row',
-      alignItems: 'center',
-      alignContent: 'center',
-      justifyContent: 'center',
-      gap: 10,
-    },
-    amountTextInput: {
-      flex: 1,
-      fontWeight: 'bold',
-      backgroundColor: colors.primaryColor,
-    },
-    addAmountButton: {
-      height: 55,
-      justifyContent: 'center',
-      borderRadius: 5,
-      flex: 0,
-      fontSize: 20,
-      backgroundColor: colors.primaryColor,
-    },
-    decrementAmountButton: {
-      height: 55,
-      justifyContent: 'center',
-      borderRadius: 5,
-      flex: 0,
-      backgroundColor: colors.fourthColor,
-    },
-    label: {
-      textAlign: 'left',
-      width: '100%',
-      color: colors.onSecondaryColor,
-    },
-    saveButton: {
-      height: 55,
-      justifyContent: 'center',
-      borderRadius: 5,
-      flex: 0,
-      width: '90%',
-      marginTop: 25,
-      backgroundColor: colors.primaryColor,
-    },
-  })
 
 export default ModalAddItem
