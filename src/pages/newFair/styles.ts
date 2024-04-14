@@ -38,6 +38,7 @@ export const useStyles = () => {
         alignContent: 'center',
         padding: 10,
         width: '100%',
+        marginBottom: 10,
       },
       description: {
         flex: 1,
@@ -45,6 +46,8 @@ export const useStyles = () => {
         backgroundColor: colors.primaryColor,
       },
       button: {
+        height: 50,
+        justifyContent: 'center',
         marginTop: 5,
         borderRadius: 5,
         borderColor: colors.secondaryColor,

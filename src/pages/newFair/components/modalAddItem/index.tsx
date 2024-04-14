@@ -16,6 +16,8 @@ const ModalAddItem: React.FC<ModalAddItemProps> = ({ onSaveItem }) => {
   const [amount, setAmount] = useState(1)
   const [price, setPrice] = useState('')
 
+  console.log("loop detector", "ModalAddItem")
+
   const addAmountHandler = (valueToSum: number) => {
     setAmount((amount) => {
       const newAmount = amount + valueToSum
@@ -128,6 +130,7 @@ const getStyles = (colors: AppThemeColors) =>
       flex: 0,
       width: '100%',
       fontWeight: 'bold',
+      backgroundColor: colors.primaryColor,
     },
     amountContainer: {
       flex: 0,
@@ -140,12 +143,20 @@ const getStyles = (colors: AppThemeColors) =>
     amountTextInput: {
       flex: 1,
       fontWeight: 'bold',
+      backgroundColor: colors.primaryColor,
     },
     addAmountButton: {
+      height: 55,
+      justifyContent: 'center',
+      borderRadius: 5,
       flex: 0,
+      fontSize: 20,
       backgroundColor: colors.primaryColor,
     },
     decrementAmountButton: {
+      height: 55,
+      justifyContent: 'center',
+      borderRadius: 5,
       flex: 0,
       backgroundColor: colors.fourthColor,
     },
@@ -155,6 +166,9 @@ const getStyles = (colors: AppThemeColors) =>
       color: colors.onSecondaryColor,
     },
     saveButton: {
+      height: 55,
+      justifyContent: 'center',
+      borderRadius: 5,
       flex: 0,
       width: '90%',
       marginTop: 25,

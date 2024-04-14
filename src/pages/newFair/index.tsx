@@ -39,6 +39,7 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
   const [name, setName] = useState('')
   const [date, setDate] = useState<Date>(new Date());
   const [showDate, setShowDate] = useState(false);
+  const [search, setSearch] = useState('')
 
   const onToggleSnackBar = () => setSnackVisible(!snackVisible)
   const onDismissSnackBar = () => setSnackVisible(false)
@@ -152,8 +153,12 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
   const fairList = useMemo(() => {
     if (!currentFair) return []
     if (!currentFair.fairList || !currentFair.fairList.length) return []
+    if (search) return [...currentFair.fairList]
+      .reverse()
+      .filter(item => item.name.toLowerCase()
+        .includes(search.toLowerCase()))
     return [...currentFair.fairList].reverse()
-  }, [currentFair])
+  }, [currentFair, search])
 
   const onChange = (selectedDate: Date | undefined) => {
     if (selectedDate) {
@@ -194,6 +199,17 @@ const NewFair: React.FC<RouteProps> = ({ route }) => {
         </Button>
       </View>
       <View style={styles.addItemContainer}>
+        <TextInput
+          outlineColor={colors.onPrimaryColor}
+          selectionColor={colors.primaryColor}
+          textColor={colors.secondaryColor}
+          activeOutlineColor={colors.secondaryColor}
+          style={styles.description}
+          mode={componentsMode}
+          label="Pesquisar Item"
+          value={search}
+          onChangeText={(text) => setSearch(text)}
+        />
         <Button
           style={styles.button}
           textColor={colors.onSecondaryColor}
