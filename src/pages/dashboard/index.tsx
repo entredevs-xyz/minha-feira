@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Appearance } from 'react-native'
 import { Icon, Surface } from 'react-native-paper'
 import LineChartComp from '@/components/lineChart'
 import { RouteProps } from '@/router/routes'
@@ -43,6 +43,13 @@ const Dashboard: React.FC<RouteProps> = ({ navigation }) => {
     })
   }, [getAll])
 
+  const changeTheme = useCallback(() => {
+    const currentTheme = Appearance.getColorScheme()
+    const newCurrentTheme = currentTheme === 'dark' ? 'light' : 'dark'
+    Appearance.setColorScheme(newCurrentTheme)
+
+  }, [])
+
   useFocusEffect(handlerRefresh)
 
   const months = useMemo(() => {
@@ -84,6 +91,15 @@ const Dashboard: React.FC<RouteProps> = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar style="dark" backgroundColor={colors.background} />
       <View style={styles.viewUp}>
+        <TouchableOpacity
+          style={styles.theme}
+          onPress={changeTheme}>
+          <Icon
+            source="theme-light-dark"
+            color={colors.primaryColor}
+            size={30}
+          />
+        </TouchableOpacity>
         <Text style={styles.welcome}>&apos;{currentPhrase}&apos;</Text>
       </View>
       <View style={styles.viewDown}>
@@ -114,7 +130,7 @@ const Dashboard: React.FC<RouteProps> = ({ navigation }) => {
             style={styles.buttons}
             onPress={handlerNewFair}
           >
-            <Icon source={"cart-plus"} size={30} color={colors.onSecondary} />
+            <Icon source={"cart-plus"} size={30} color={colors.onSecondaryColor} />
             <Text style={styles.buttonsLabel}>
               Nova Feira
             </Text>
@@ -123,7 +139,7 @@ const Dashboard: React.FC<RouteProps> = ({ navigation }) => {
             style={styles.buttons}
             onPress={handlerFairHistory}
           >
-            <Icon source={"cart-outline"} size={30} color={colors.onSecondary} />
+            <Icon source={"cart-outline"} size={30} color={colors.onSecondaryColor} />
             <Text style={styles.buttonsLabel}>
               Histórico
             </Text>
@@ -132,7 +148,7 @@ const Dashboard: React.FC<RouteProps> = ({ navigation }) => {
             style={styles.buttons}
             onPress={() => { }}
           >
-            <Icon source={"calculator"} size={30} color={colors.onSecondary} />
+            <Icon source={"calculator"} size={30} color={colors.onSecondaryColor} />
             <Text style={styles.buttonsLabel}>
               Calculadora
             </Text>

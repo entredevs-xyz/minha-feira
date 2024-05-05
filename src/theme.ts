@@ -5,20 +5,42 @@ export const theme = {
   colors: {
     ...DefaultTheme.colors,
 
-    primaryColor: '#E3FEF7',
+    primaryColor: '#ffffff',
     onPrimaryColor: '#0d5c63',
 
     secondaryColor: '#0d5c63',
-    onSecondaryColor: '#e9fbfc',
+    onSecondaryColor: '#ffffff',
 
     tertiaryColor: '#44a1a0',
-    onTertiaryColor: '#e9fbfc',
+    onTertiaryColor: '#ffffff',
 
     fourthColor: '#78cdd7',
-    onFourthColor: '#e9fbfc',
+    onFourthColor: '#ffffff',
 
     fifthColor: '#247b7b',
-    onFifthColor: '#e9fbfc',
+    onFifthColor: '#ffffff',
+  },
+}
+
+export const darkTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+
+    primaryColor: '#041d1f',
+    onPrimaryColor: '#0d5c63',
+
+    secondaryColor: '#0d5c63',
+    onSecondaryColor: '#041d1f',
+
+    tertiaryColor: '#44a1a0',
+    onTertiaryColor: '#041d1f',
+
+    fourthColor: '#78cdd7',
+    onFourthColor: '#041d1f',
+
+    fifthColor: '#247b7b',
+    onFifthColor: '#041d1f',
   },
 }
 
