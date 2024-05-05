@@ -100,19 +100,19 @@ const Dashboard: React.FC<RouteProps> = ({ navigation }) => {
             size={30}
           />
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.refresh}
+          onPress={handlerRefresh}>
+          <Icon
+            source="refresh"
+            color={colors.primaryColor}
+            size={30}
+          />
+        </TouchableOpacity>
         <Text style={styles.welcome}>&apos;{currentPhrase}&apos;</Text>
       </View>
       <View style={styles.viewDown}>
         <Surface style={styles.media}>
-          <TouchableOpacity
-            style={styles.refresh}
-            onPress={handlerRefresh}>
-            <Icon
-              source="refresh"
-              color={colors.onPrimaryColor}
-              size={30}
-            />
-          </TouchableOpacity>
           <Text style={styles.mediaTitle}>PREÇO MEDIO:</Text>
           <View style={styles.mediaValue}>
             <Text style={styles.mediaSufix}>R$</Text>

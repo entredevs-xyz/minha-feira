@@ -42,8 +42,8 @@ export const useStyles = () => {
         },
         refresh:{
             position: 'absolute',
-            top: 10,
-            right: 10,
+            top: insets.top,
+            right: 70,
             zIndex: 10,
         },
         theme:{
